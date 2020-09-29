@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css}"
+          href="/adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/font-awesome/css/font-awesome.min.css}"
+          href="/adminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/Ionicons/css/ionicons.min.css}"
+          href="/adminLTE/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/adminLTE/dist/css/AdminLTE.min.css}" href="/adminLTE/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE 皮肤。默认使用蓝色皮肤。
+        您可以选择其他皮肤。皮肤样式写在 body 标签中，
+        以便使之生效。 -->
+    <link rel="stylesheet" th:href="@{/adminLTE/dist/css/skins/_all-skins.min.css}"
+          href="/adminLTE/dist/css/skins/_all-skins.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css}" href="/adminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <!--layui样式-->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="/layui/css/layui.css">
+    <!--jqueryComfirm样式-->
+    <link th:href="@{/adminLTE/plugins/jqueryComfirm/jquery-confirm.min.css}" href="/adminLTE/plugins/jqueryComfirm/jquery-confirm.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="wrapper">
+    <!--------------------------------------------- 头部 ------------------------------------------>
+    <!--引入抽取的AdminLTEdemo-->
+    <!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+    <div th:replace="commons/AdminLTEdemo::main_header"></div>
+
+    <!-------------------------------------------- 左部侧边栏 ---------------------------------------------->
+    <div th:replace="commons/AdminLTEdemo::#main_sidebar(activeUri='userList')"></div>
+
+    <!------------------------------------- 页面主体内容 -------------------------------------->
+    <div class="content-wrapper">
+        <!------- 头部 (页眉) ------->
+        <section class="content-header">
+            <h1>
+                用户信息列表
+                <!--<small>欢迎您</small>-->
+            </h1>
+            <!-- 面包屑 -->
+            <ol class="breadcrumb">
+                <li><a th:href="@{/main.html}" href="/main.html"><i class="fa fa-dashboard"></i>首页</a></li>
+                <li class="active">用户列表</li>
+            </ol>
+        </section>
+
+        <!------ 主体内容 ------>
+        <section class="content container-fluid">
+            <!-- .box-body -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">列表</h3>
+                </div>
+
+                <div class="box-body">
+
+                    <!-- 数据表格 -->
+                    <div class="table-box">
+
+                        <!--工具栏-->
+                        <div class="pull-left">
+                            <div class="form-group form-inline">
+                                <div class="btn-group">
+                                    <button type="button" id="btn_add" name="btn_add" class="btn btn-success"
+                                            title="新建" onclick="">
+                                        <i class="fa fa-file-o"></i> 新建
+                                    </button>
+                                    <button type="button" id="refresh" name="refresh" class="btn btn-info"
+                                            title="刷新">
+                                        <i class="fa fa-refresh"></i> 刷新
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <div class="form-group form-inline">
+
+                                <select class="form-control" id="stype" name="stype">
+                                    <option value="0" selected>=请选择字段=</option>
+                                    <option value="1">姓名</option>
+                                    <option value="2">住址</option>
+                                </select>
+                                <input type="text" id="svalue" name="svalue" class="form-control"
+                                       placeholder="请输入查找字段值"/>
+                                <div class="btn-group">
+                                    <button class="btn btn-info btn-search" id="search" name="search"
+                                            onclick="search()">查找
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--工具栏/-->
+
+                        <!--数据列表-->
+
+                        <table id="example1" class="table table-bordered table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>年龄</th>
+                                <th>住址</th>
+                                <th>qq</th>
+                                <th>邮箱</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user:${users}">
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.name}"></td>
+                                <td th:text="${user.gender}"></td>
+                                <td th:text="${user.age}"></td>
+                                <td th:text="${user.address}"></td>
+                                <td th:text="${user.qq}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td>
+
+                                    <button type="button" class="btn layui-bg-blue btn-sm" id="editUser" name="editUser"
+                                            th:onclick="|editUser(${user.id})|">编辑
+                                    </button>
+                                    <button type="button" class="btn bg-red btn-sm" id="delUser" name="delUser"
+                                            th:onclick="|delUser(${user.id})|">删除
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--数据列表/-->
+                    </div>
+                    <!-- 数据表格 /-->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!--------------- 新增模态框（Modal） ---------------->
+            <div class="modal fade bs-example-modal-lg" id="addModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="addModalLabel">新增用户信息</h3>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label for="name1">姓名</label>
+                                <input type="text" id="name1" name="name1" class="form-control" placeholder="姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender1">性别</label>
+                                <input type="text" name="gender1" id="gender1" class="form-control" placeholder="性别">
+                            </div>
+                            <div class="form-group">
+                                <label for="age1">年龄</label>
+                                <input type="text" name="age1" id="age1" class="form-control" placeholder="年龄">
+                            </div>
+                            <div class="form-group">
+                                <label for="address1">住址</label>
+                                <input type="text" name="address1" id="address1" class="form-control" placeholder="住址">
+                            </div>
+                            <div class="form-group">
+                                <label for="qq1">QQ</label>
+                                <input type="text" name="qq1" id="qq1" class="form-control" placeholder="qq账号">
+                            </div>
+                            <div class="form-group">
+                                <label for="email1">邮箱</label>
+                                <input type="text" name="email1" id="email1" class="form-control" placeholder="邮箱">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close1" name="close1" class="btn btn-default"
+                                    data-dismiss="modal"><span class="glyphicon glyphicon-remove"
+                                                               aria-hidden="true"></span>关闭
+                            </button>
+                            <button type="button" id="btn_submit1" class="btn btn-primary"><span
+                                    class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--------------- 修改模态框（Modal） ---------------->
+            <div class="modal fade bs-example-modal-lg" id="updateModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="updateModalLabel">修改用户信息</h3>
+                        </div>
+                        <div class="modal-body">
+                            <!--注意需要一个隐藏域的id用来传值-->
+                            <div class="form-group">
+                                <input type="hidden" id="id" name="id" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="name2">姓名</label>
+                                <input type="text" id="name2" name="name2" class="form-control" placeholder="姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender2">性别</label>
+                                <input type="text" name="gender2" id="gender2" class="form-control" placeholder="性别">
+                            </div>
+                            <div class="form-group">
+                                <label for="age2">年龄</label>
+                                <input type="text" name="age2" id="age2" class="form-control" placeholder="年龄">
+                            </div>
+                            <div class="form-group">
+                                <label for="address2">住址</label>
+                                <input type="text" name="address2" id="address2" class="form-control" placeholder="住址">
+                            </div>
+                            <div class="form-group">
+                                <label for="qq2">QQ</label>
+                                <input type="text" name="qq2" id="qq2" class="form-control" placeholder="qq账号">
+                            </div>
+                            <div class="form-group">
+                                <label for="email2">邮箱</label>
+                                <input type="text" name="email2" id="email2" class="form-control" placeholder="邮箱">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close2" name="close2" class="btn btn-default"
+                                    data-dismiss="modal"><span class="glyphicon glyphicon-remove"
+                                                               aria-hidden="true"></span>关闭
+                            </button>
+                            <button type="button" id="btn_submit2" class="btn btn-primary"><span
+                                    class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!------- 尾部Footer ------>
+    <div th:replace="commons/AdminLTEdemo::main_footer"></div>
+
+    <!------------------------------------右侧设置按钮的侧边栏 ------------------------------------>
+    <div th:replace="commons/AdminLTEdemo::control_sidebar"></div>
+    <!-- /.control-sidebar -->
+    <!-- 添加侧边栏的背景。这个 div必须放在 control-sidebar 之后 -->
+    <div class="control-sidebar-bg"></div>
+</div>
+
+<!--------------------------- 导入的 JS SCRIPTS ------------------------>
+<!-- jQuery 3 -->
+<script th:src="@{/adminLTE/bower_components/jquery/dist/jquery.min.js}"
+        src="/adminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js}"
+        src="/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/adminLTE/dist/js/adminlte.min.js}" src="/adminLTE/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script th:src="@{/adminLTE/dist/js/demo.js}" src="/adminLTE/dist/js/demo.js"></script>
+
+<!-- layui -->
+<script th:src="@{/layui/layui.js}" src="/layui/layui.js"></script>
+<!-- DataTables -->
+<script th:src="@{/adminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js}" src="/adminLTE/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script th:src="@{/adminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}" src="/adminLTE/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- jquery-confirm jquery-form-->
+<script th:src="@{/adminLTE/plugins/jqueryComfirm/jquery-confirm.min.js}" src="/adminLTE/plugins/jqueryComfirm/jquery-confirm.min.js "></script>
+<script th:src="@{/adminLTE/plugins/jqueryComfirm/jquery-form.min.js}" src="/adminLTE/plugins/jqueryComfirm/jquery-form.min.js"></script>
+
+<script>
+    /*数据表格脚本*/
+    $(function () {
+        $('#example1').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true,
+            "sPaginationType": "full_numbers",
+            "aLengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ], //更改显示记录数选项
+            // 语言
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从 _START_ 到 _END_ / 共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                },
+                "sZeroRecords": "没有检索到数据",
+            }
+        })
+    })
+
+    /*加载添加用户信息模态框*/
+    $("#btn_add").click(function () {
+        $("#addModalLabel").text("添加用户信息");
+        $('#addModal').modal();
+    });
+    /*点击关闭模态框后重载页面*/
+    $("#refresh,#close1,#close2").click(function () {
+        window.location.reload();
+    });
+    /*点击添加用户模态框的提交按钮*/
+    $('#btn_submit1').on('click', function () {
+        var name1 = $("#name1").val();
+        if (name1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '姓名不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#name1").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var gender1 = $("#gender1").val();
+        if (gender1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '性别不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#gender1").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var age1 = $("#age1").val();
+        if (age1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '年龄不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#age1").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var address1 = $("#address1").val();
+        if (address1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '住址不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#address1").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var qq1 = $("#qq1").val();
+        if (qq1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: 'qq账号不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#qq1").focus();
+                    }
+                },
+
+            });
+            return;
+        }
+        var email1 = $("#email1").val();
+        if (email1 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '邮箱不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#email1").focus();
+                    }
+                },
+
+            });
+            return;
+        }
+        $.confirm({
+            title: '添加提示',
+            content: '确认要添加吗？',
+            icon: 'fa fa-question-circle',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            // opacity: 0.5,
+            buttons: {
+                'confirm': {
+                    text: '确定',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        //layer.load();
+                        $.ajax({
+                            url: "[[@{/user/addUser}]]",
+                            //secureuri : false,
+                            dataType: 'json',//此时指定的是后台需要返回json字符串,前端自己解析,可以注释掉.后台直接返回map
+                            data: {
+                                name: name1,
+                                gender: gender1,
+                                age: age1,
+                                address: address1,
+                                qq: qq1,
+                                email: email1
+                            },
+                            success: function (data, status) {
+                                var arr = data.msg;
+                                if (arr == "1") {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '添加成功!',
+                                        buttons: {
+                                            确定: function () {
+                                                window.location.reload();
+                                            }
+                                        },
+
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '添加失败!',
+                                        buttons: {
+                                            确定: function () {
+                                            }
+                                        },
+
+                                    });
+
+                                }
+                            },
+                            error: function (data, status, e) {
+                                $.alert({
+                                    title: '提示信息',
+                                    content: '添加失败!',
+                                    buttons: {
+                                        确定: function () {
+                                        }
+                                    },
+
+                                });
+                            }
+                        });
+
+                    },
+                },
+                取消: function () {
+                    //$.alert('你点击了<strong>取消</strong>');
+                }
+            }
+        });
+    });
+
+    function delUser(id) {
+        $.confirm({
+            title: '提示信息',
+            content: '确认要删除吗？',
+            icon: 'fa fa-question-circle',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            // opacity: 0.5,
+            buttons: {
+                'confirm': {
+                    text: '确定',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        $.ajax({
+                            url: "[[@{/user/delUser}]]",
+                            //secureuri : false,
+                            dataType: 'json',//此时指定的是后台需要返回json字符串,前端自己解析,可以注释掉.后台直接返回map
+                            data: {
+                                id: id
+                            },
+                            success: function (data, status) {
+                                var arr = data.msg;
+                                if (arr == "1") {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '删除成功!',
+                                        buttons: {
+                                            确定: function () {
+                                                window.location.reload();
+                                            }
+                                        },
+
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '删除失败!',
+                                        buttons: {
+                                            确定: function () {
+                                            }
+                                        },
+
+                                    });
+
+                                }
+                            },
+                            error: function (data, status, e) {
+                                $.alert({
+                                    title: '提示信息',
+                                    content: '删除失败!',
+                                    buttons: {
+                                        确定: function () {
+                                        }
+                                    },
+
+                                });
+                            }
+                        });
+
+                    },
+                },
+                取消: function () {
+                    //$.alert('你点击了<strong>取消</strong>');
+                }
+            }
+        });
+    }
+
+    function editUser(id) {
+        $.getJSON("[[@{/user/findUserById}]]", "id=" + id, function (data) {
+            $('#name2').attr("value", data.name);
+            $('#gender2').attr("value", data.gender);
+            $('#age2').attr("value", data.age);
+            $('#address2').attr("value", data.address);
+            $('#qq2').attr("value", data.qq);
+            $('#email2').attr("value", data.email);
+            $('#id').attr("value", data.id);
+            $('#updateModal').modal('show');
+        })
+    }
+
+    $('#btn_submit2').on('click', function () {
+        var id = $("#id").val();
+        var name2 = $("#name2").val();
+        if (name2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '姓名不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#name2").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var gender2 = $("#gender2").val();
+        if (gender2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '性别不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#gender2").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var age2 = $("#age2").val();
+        if (age2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '年龄不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#age2").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var address2 = $("#address2").val();
+        if (address2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '住址不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#address2").focus();
+
+                    }
+                },
+
+            });
+            return;
+        }
+        var qq2 = $("#qq2").val();
+        if (qq2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: 'qq账号不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#qq2").focus();
+                    }
+                },
+
+            });
+            return;
+        }
+        var email2 = $("#email2").val();
+        if (email2 == "") {
+            $.alert({
+                title: '提示信息',
+                content: '邮箱不能为空!',
+                buttons: {
+                    确定: function () {
+                        $("#email2").focus();
+                    }
+                },
+
+            });
+            return;
+        }
+        $.confirm({
+            title: '提示信息',
+            content: '确认要修改吗？',
+            icon: 'fa fa-question-circle',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            // opacity: 0.5,
+            buttons: {
+                'confirm': {
+                    text: '确定',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        //layer.load();
+                        $.ajax({
+                            url: "[[@{/user/updateUser}]]",
+                            dataType: 'json',//此时指定的是后台需要返回json字符串,前端自己解析,可以注释掉.后台直接返回map
+                            data: {
+                                id: id,
+                                name: name2,
+                                gender: gender2,
+                                age: age2,
+                                address: address2,
+                                qq: qq2,
+                                email: email2
+                            },
+                            success: function (data, status) {
+                                var arr = data.msg;
+                                if (arr == "1") {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '修改成功!',
+                                        buttons: {
+                                            确定: function () {
+                                                window.location.reload();
+                                            }
+                                        },
+
+                                    });
+                                } else {
+                                    $.alert({
+                                        title: '提示信息',
+                                        content: '修改失败!',
+                                        buttons: {
+                                            确定: function () {
+                                            }
+                                        },
+
+                                    });
+
+                                }
+                            },
+                            error: function (data, status, e) {
+                                $.alert({
+                                    title: '提示信息',
+                                    content: '修改失败!',
+                                    buttons: {
+                                        确定: function () {
+                                        }
+                                    },
+
+                                });
+                            }
+                        });
+
+                    },
+                },
+                取消: function () {
+                    //$.alert('你点击了<strong>取消</strong>');
+                }
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>系统首页</title>
+    <!-- 告诉浏览器该页面是自适应布局 -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css}"
+          href="/adminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/font-awesome/css/font-awesome.min.css}"
+          href="/adminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/adminLTE/bower_components/Ionicons/css/ionicons.min.css}"
+          href="/adminLTE/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/adminLTE/dist/css/AdminLTE.min.css}" href="/adminLTE/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE 皮肤。默认使用蓝色皮肤。
+        您可以选择其他皮肤。皮肤样式写在 body 标签中，
+        以便使之生效。 -->
+    <link rel="stylesheet" th:href="@{/adminLTE/dist/css/skins/_all-skins.min.css}"
+          href="/adminLTE/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+
+<body class="hold-transition skin-purple sidebar-mini">
+<div class="wrapper">
+
+    <!--------------------------------------------- 头部 ------------------------------------------>
+    <!--引入抽取的AdminLTEdemo-->
+    <!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+    <div th:replace="commons/AdminLTEdemo::main_header"></div>
+
+    <!-------------------------------------------- 左部侧边栏 ---------------------------------------------->
+    <div th:replace="commons/AdminLTEdemo::#main_sidebar(activeUri='main')"></div>
+
+    <!------------------------------------- 页面主体内容 -------------------------------------->
+    <div class="content-wrapper">
+        <!------- 头部 (页眉) ------->
+        <section class="content-header">
+            <h1>
+                首页
+                <small>欢迎您</small>
+            </h1>
+            <!-- 面包屑 -->
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> home</a></li>
+                <li class="active">样例</li>
+            </ol>
+        </section>
+
+        <!------ 主体内容 ------>
+        <section class="content container-fluid">
+            <!-- 面板样例 -->
+            <div class="box box-primary">
+                <!-- 面板头部 -->
+                <div class="box-header with-border">
+                    <i class="fa fa-cube"></i>
+                    <h3 class="box-title">面板样例</h3>
+                </div>
+                <!-- 面板内容 -->
+                <div class="box-body">
+                    <h1>我是首页！</h1>
+                    <h3>任何你想要的</h3>
+
+                </div>
+
+
+            </div>
+            <!-- /.box-body -->
+
+        </section>
+    </div>
+
+    <!------- 尾部Footer ------>
+    <div th:replace="commons/AdminLTEdemo::main_footer"></div>
+
+    <!------------------------------------右侧设置按钮的侧边栏 ------------------------------------>
+    <div th:replace="commons/AdminLTEdemo::control_sidebar"></div>
+    <!-- /.control-sidebar -->
+    <!-- 添加侧边栏的背景。这个 div必须放在 control-sidebar 之后 -->
+    <div class="control-sidebar-bg"></div>
+</div>
+
+
+<!--------------------------- 导入的 JS SCRIPTS ------------------------>
+<!-- jQuery 3 -->
+<script th:src="@{/adminLTE/bower_components/jquery/dist/jquery.min.js}"
+        src="/adminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js}"
+        src="/adminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/adminLTE/dist/js/adminlte.min.js}" src="/adminLTE/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script th:src="@{/adminLTE/dist/js/demo.js}" src="/adminLTE/dist/js/demo.js"></script>
+
+</body>
+
+</html>
